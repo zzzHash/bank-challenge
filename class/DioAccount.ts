@@ -9,6 +9,10 @@ export abstract class DioAccount {
     this.accountNumber = accountNumber;
   }
 
+  setStatus = (value: boolean): void => {
+    this.status = value;
+  };
+
   setName = (name: string): void => {
     this.name = name;
     console.log("Nome alterado com sucesso!");
@@ -42,9 +46,20 @@ export abstract class DioAccount {
     throw new Error("Conta inválida");
   };
 
-  private validadeWithdraw = (value: number): boolean => {
-    if (this.balance >= value && this.status) return true;
+  validateBalanceWithdraw = (value: number): boolean => {
+    if (this.balance >= value) {
+      return true;
+    } else {
+      throw new Error("Saldo insuficiente");
+      return false;
+    }
+  };
 
-    throw new Error("Saldo insuficiente");
+  private validadeWithdraw = (value: number): boolean => {
+    if (this.validateBalanceWithdraw(value) && this.validateStatus()) {
+      return true;
+    } else {
+      return false;
+    }
   };
 }
